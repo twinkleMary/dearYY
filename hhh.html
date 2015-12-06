@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript">
+	window.onload = function(){
+		var canvas = document.getElementById("c");
+		var ctx = c.getContext("2d");
+		var W = canvas.width = window.innerWidth;
+		var H = canvas.height = window.innerHeight;
+		var mousePos = {
+		    x: 100,
+		    y: -100
+		};
+
+		var rad = Math.PI / 180;
+		var offset = 0;
+		var flip = 1;
+
+		function Draw() {
+		    ctx.fillStyle = "RGBA(100, 100, 35, 1)";
+		    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+		    if (offset == 360 || offset == -360) {
+		        flip = -1 * flip;
+		    }
+		    offset += flip * 0.1;
+
+		    heart(2, 10);
+
+		    window.requestAnimationFrame(Draw);
+		}
+
+		var circleR = 50;
+		var distance = 300;
+
+		function heart(size1, size2) {
+		    for (var i = 0; i < 360; i += 2) {
+		        t1 = i;
+		        t2 = i;
+		        r1 = size1;
+		        r2 = size2;
+		        var x1 = W / 3 + 16 * r1 * (Math.sin(t1 * rad) * Math.sin(t1 * rad) * Math.sin(t1 * rad));
+		        var y1 = H - 30 - 13 * r1 * Math.cos(t1 * rad) +
+		            5 * r1 * Math.cos(2 * t1 * rad) +
+		            2 * r1 * Math.cos(3 * t1 * rad) +
+		            r1 * Math.cos(4 * t1 * rad);
+		        var x2 = W / 3 + 16 * r2 * (Math.sin(t2 * rad) * Math.sin(t2 * rad) * Math.sin(t2 * rad));
+		        var y2 = H - 30 - 13 * r2 * Math.cos(t2 * rad) +
+		            5 * r2 * Math.cos(2 * t2 * rad) +
+		            2 * r2 * Math.cos(3 * t2 * rad) +
+		            r2 * Math.cos(4 * t2 * rad);
+		        ctx.beginPath();
+		        ctx.moveTo(x1, y1);
+		        ctx.lineTo(Math.cos(offset) * circleR + x2 + distance, Math.sin(offset) * circleR + y2 - distance);
+		        ctx.lineWidth = 2;
+		        ctx.lineCap = "round";
+		        var grd = ctx.createLinearGradient(x1, y1, x2, y2);
+		        grd.addColorStop(0, "#FFFFFF");
+		        grd.addColorStop(0.6, "#FFF8BB");
+		        ctx.strokeStyle = grd;
+		        ctx.stroke();
+		        ctx.closePath();
+		    }
+		}
+
+		window.requestAnimationFrame(Draw);
+
+		window.addEventListener('resize', function(e) {
+		    W = canvas.width = window.innerWidth;
+		    H = canvas.height = window.innerHeight;
+		}, false);
+	}
+	</script>
+</head>
+<body style="margin:0">
+	<canvas id="c"></canvas>
+</body>
+</html>
